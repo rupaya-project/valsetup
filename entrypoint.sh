@@ -66,22 +66,9 @@ log "Constructing geth command..."
 CMD="geth --networkid ${NETWORK_ID} \
   --syncmode ${SYNCMODE} \
   --gcmode ${GCMODE} \
-  --http \
-  --http.addr 0.0.0.0 \
-  --http.port 8545 \
-  --http.api ${HTTP_API} \
-  --http.corsdomain '*' \
-  --http.vhosts=* \
-  --ws \
-  --ws.addr 0.0.0.0 \
-  --ws.port 8546 \
-  --ws.api ${WS_API} \
   --bootnodes ${BOOTNODES} \
   --mine \
   --miner.etherbase 0x${ACCOUNT} \
-  --unlock 0x${ACCOUNT} \
-  --password ${PASSWORD_FILE} \
-  --allow-insecure-unlock \
   --nat extip:${EXTERNAL_IP} \
   --verbosity ${VERBOSITY}"
 

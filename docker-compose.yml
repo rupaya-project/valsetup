@@ -5,13 +5,14 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+    networks:
+      - docker-compose_default
+    ports:
+      - "30303:30303"
+      - "30303:30303/udp"
     volumes:
       - chaindata:/root/.ethereum
       - ./genesis.json:/root/genesis.json
-    ports:
-      - "${HTTP_PORT:-8545}:8545"
-      - "${WS_PORT:-8546}:8546"
-      - "${P2P_PORT:-30303}:30303"
     environment:
       - NETWORK_ID
       - SYNCMODE
@@ -19,13 +20,20 @@ services:
       - HTTP_API
       - WS_API
       - BOOTNODES
-      - MINER_ETHERBASE
       - VERBOSITY
       - IMPORT_PRIVATE_KEY
+      - HTTP_RATELIMIT
+      - WS_RATELIMIT
     secrets:
       - node_password
       - node_private_key
     entrypoint: /entrypoint.sh
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200m"
+        max-file: "10"
 
 volumes:
   chaindata:
@@ -35,3 +43,7 @@ secrets:
     file: ./password.txt
   node_private_key:
     file: ./private_key.txt
+
+networks:
+  docker-compose_default:
+    external: true
